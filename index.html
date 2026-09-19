@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CASSO — Movie Booking</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <header class="topbar">
+    <div class="brand" onclick="showSection('home')">
+      <span class="brand-mark">C</span>
+      <div>
+        <strong>CASSO</strong>
+        <small>cinema booking</small>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-link active" data-section="home">Home</button>
+      <button class="nav-link" data-section="movies">Movies</button>
+      <button class="nav-link" data-section="bookings">My Bookings</button>
+    </nav>
+
+    <div class="header-actions">
+      <span id="userChip" class="user-chip hidden"></span>
+      <button id="authBtn" class="btn btn-primary" onclick="openAuth()">Sign in</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="page-section active-section">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">YOUR SEAT. YOUR SHOW. YOUR NIGHT.</span>
+          <h1>Movies feel better<br><span>when the seat is yours.</span></h1>
+          <p>Browse movies, choose a theatre, pick your exact seat, and manage every booking from one clean dashboard.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" onclick="showSection('movies')">Explore movies <span>→</span></button>
+            <button class="btn btn-ghost btn-lg" onclick="showSection('bookings')">View my bookings</button>
+          </div>
+          <div class="hero-stats">
+            <div><strong>20</strong><span>Seats / show</span></div>
+            <div><strong>4</strong><span>Daily shows</span></div>
+            <div><strong>3</strong><span>Theatres</span></div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-poster poster-avengers">
+            <span class="poster-badge">FEATURED</span>
+            <div class="poster-content">
+              <span>AVENGERS</span>
+              <strong>ENDGAME<br>ENCORE</strong>
+              <small>★ 8.4 • ACTION</small>
+            </div>
+          </div>
+          <div class="hero-card-info">
+            <div>
+              <span class="muted">Tonight's pick</span>
+              <h3>Avengers Endgame Encore</h3>
+            </div>
+            <button class="round-btn" onclick="startQuickBook(0)">↗</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-heading compact">
+        <div>
+          <span class="eyebrow">TRENDING NOW</span>
+          <h2>Pick your next movie</h2>
+        </div>
+        <button class="text-btn" onclick="showSection('movies')">See all →</button>
+      </div>
+      <div id="homeMovies" class="movie-grid"></div>
+    </section>
+
+    <section id="movies" class="page-section">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">CASSO CINEMA</span>
+          <h2>Movies playing now</h2>
+          <p>Select a movie to start your booking.</p>
+        </div>
+        <div class="filter-bar">
+          <button class="filter active" data-filter="all">All</button>
+          <button class="filter" data-filter="Action">Action</button>
+          <button class="filter" data-filter="Drama">Drama</button>
+          <button class="filter" data-filter="Mythology & family">Family</button>
+        </div>
+      </div>
+      <div id="movieGrid" class="movie-grid large"></div>
+    </section>
+
+    <section id="bookings" class="page-section">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">YOUR ACTIVITY</span>
+          <h2>My bookings</h2>
+          <p>View, transfer, or cancel your active reservation.</p>
+        </div>
+      </div>
+      <div id="bookingEmpty" class="empty-state">
+        <div class="empty-icon">🎟</div>
+        <h3>No active booking</h3>
+        <p>Book a movie and it will appear here instantly.</p>
+        <button class="btn btn-primary" onclick="showSection('movies')">Browse movies</button>
+      </div>
+      <div id="bookingCard" class="booking-layout hidden"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Auth Modal -->
+  <div id="authModal" class="modal-backdrop hidden">
+    <div class="modal auth-modal">
+      <button class="modal-close" onclick="closeModal('authModal')">×</button>
+      <div class="auth-brand"><span class="brand-mark">C</span><strong>CASSO</strong></div>
+      <div class="auth-switcher">
+        <button id="loginTab" class="switch active" onclick="setAuthMode('login')">Sign in</button>
+        <button id="registerTab" class="switch" onclick="setAuthMode('register')">Register</button>
+      </div>
+      <div id="authFormWrap"></div>
+    </div>
+  </div>
+
+  <!-- Booking Modal -->
+  <div id="bookingModal" class="modal-backdrop hidden">
+    <div class="modal booking-modal">
+      <button class="modal-close" onclick="closeModal('bookingModal')">×</button>
+      <div id="bookingStepContent"></div>
+    </div>
+  </div>
+
+  <!-- Transfer Modal -->
+  <div id="transferModal" class="modal-backdrop hidden">
+    <div class="modal small-modal">
+      <button class="modal-close" onclick="closeModal('transferModal')">×</button>
+      <span class="eyebrow">SEAT TRANSFER</span>
+      <h2>Move a seat to another passenger</h2>
+      <p class="muted">Keep the same show and seat, only update the passenger details.</p>
+      <div id="transferForm"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
